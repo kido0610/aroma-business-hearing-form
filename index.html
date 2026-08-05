@@ -112,7 +112,6 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:26px}
 <header>
   <div class="wrap">
     <h1>アロマ業務管理アプリ　業務確認シート</h1>
-    <p class="sub">ONEce　二階堂さま／NILE CREATE　木戸</p>
   </div>
 </header>
 
@@ -184,7 +183,7 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:26px}
     </div>
   </div>
 
-  <footer>NILE CREATE　木戸<br>ご不明な点はLINEでそのままご返信ください</footer>
+  <footer>ご不明な点はご連絡先までそのままご返信ください</footer>
 </div>
 
 <script>
@@ -199,7 +198,7 @@ var Q = [
   note:"作る順番を決めるために使います。順位を付ける必要はありません。3つまでで選べない場合は「その他」に書いてください。",
   o:["顧客情報を探しやすくする","集金忘れを防ぐ","アロマ交換忘れを防ぐ","商談・無料レンタルを管理する","スマートフォンで見やすくする","Googleカレンダーと連携する","Excelからデータを移す","売上や入金を集計する","見積書・請求書を作る","予定のお知らせを受け取る","その他"],other:"その他"},
  {id:4,t:"アプリを主に使うのはどなたですか",type:"one",req:true,
-  o:["二階堂さん1人だけ","二階堂さん＋スタッフ（2〜3人）","二階堂さん＋スタッフ（4人以上）","外部の協力業者にも使ってもらいたい","まだ決めていない"]},
+  o:["自分1人だけ","自分＋スタッフ（2〜3人）","自分＋スタッフ（4人以上）","外部の協力業者にも使ってもらいたい","まだ決めていない"]},
  {id:5,t:"主に使う端末はどちらですか",type:"one",req:true,
   o:["ほぼスマートフォン","スマートフォンが多い","半々くらい","パソコンが多い","ほぼパソコン"]},
  {id:6,t:"現在の仕事の流れは、下の流れとほぼ同じですか",type:"one",req:true,
@@ -564,7 +563,7 @@ document.getElementById("copyBtn").addEventListener("click", function(){
     boxEl.classList.remove("show");
     taEl.style.display = "";
     outEl.classList.add("show");
-    notify("回答をコピーしました。木戸とのLINEを開き、メッセージ入力欄を長押しして『ペースト』を選び、そのまま送信してください。", "bn-ok", 0);
+    notify("回答をコピーしました。LINEのトークを開き、メッセージ入力欄を長押しして『ペースト』を選び、そのまま送信してください。", "bn-ok", 0);
     window.scrollTo(0, 0);
   }
 
