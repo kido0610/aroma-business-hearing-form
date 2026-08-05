@@ -195,7 +195,7 @@ var Q = [
  {id:2,t:"現在、一番手間がかかっている・困っている業務はどれですか",type:"multi",req:true,
   o:["顧客情報を探す","集金予定の管理","集金が済んだかの確認","アロマ交換予定の管理","商談・無料レンタルの管理","契約情報の管理","Excelへの入力","予定の確認","その他","特に困っていない"],other:"その他"},
  {id:3,t:"このアプリで特に優先して改善したいことを、3つまで選んでください",type:"multi",req:true,max:3,
-  note:"作る順番を決めるために使います。順位を付ける必要はありません。3つまでで選べない場合は「その他」に書いてください。",
+  note:"作る順番を決めるために使います。順位を付ける必要はありません。当てはまるものがない場合は、「その他」を選ぶと入力欄が表示されます。",
   o:["顧客情報を探しやすくする","集金忘れを防ぐ","アロマ交換忘れを防ぐ","商談・無料レンタルを管理する","スマートフォンで見やすくする","Googleカレンダーと連携する","Excelからデータを移す","売上や入金を集計する","見積書・請求書を作る","予定のお知らせを受け取る","その他"],other:"その他"},
  {id:4,t:"アプリを主に使うのはどなたですか",type:"one",req:true,
   o:["自分1人だけ","自分＋スタッフ（2〜3人）","自分＋スタッフ（4人以上）","外部の協力業者にも使ってもらいたい","まだ決めていない"]},
@@ -272,7 +272,8 @@ Q.forEach(function(q){
     var it = q.type === "one" ? "radio" : "checkbox";
     h += '<div class="opts">';
     q.o.forEach(function(o){
-      h += '<label class="opt-row"><input type="' + it + '" name="q' + q.id + '" value="' + esc(o) + '" data-q="' + q.id + '"><span>' + esc(o) + '</span></label>';
+      var label = (q.other && o === q.other) ? o + "（選ぶと入力欄が表示されます）" : o;
+      h += '<label class="opt-row"><input type="' + it + '" name="q' + q.id + '" value="' + esc(o) + '" data-q="' + q.id + '"><span>' + esc(label) + '</span></label>';
     });
     h += "</div>";
     if (q.other) h += '<input type="text" class="sub-in" id="other' + q.id + '" data-other="' + q.id + '" placeholder="「その他」の内容（任意）" style="display:none">';
@@ -438,7 +439,13 @@ form.addEventListener("change", function(e){
       if (box) {
         var on = vals(q.id).indexOf(q.other) >= 0;
         box.style.display = on ? "block" : "none";
-        if (!on) box.value = "";
+        if (!on) { box.value = ""; }
+        else {
+          requestAnimationFrame(function(){
+            box.focus({ preventScroll: true });
+            box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          });
+        }
       }
     }
     if (q.max) applyLimit(q);
