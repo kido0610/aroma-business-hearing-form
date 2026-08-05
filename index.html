@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="アロマ業務管理アプリの業務確認シートです。回答は使用中の端末内にのみ保存され、外部へ送信されません。">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>アロマ業務管理アプリ　業務確認シート</title>
+<style>
+html, :root { color-scheme: light; }
+:root{
+  --blue:#2B54A4; --navy:#1E407D; --ink:#1C2A45; --body:#3B424D; --mute:#7C8699;
+  --line:#D9DFE8; --bg:#F4F6F9; --tint:#EDF3FB; --white:#fff; --green:#1F8A5B; --red:#B42318;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+  font-size:16px; line-height:1.7; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 64px}
+header{background:var(--white);border-bottom:4px solid var(--blue);padding:24px 0 20px;margin-bottom:16px}
+header .wrap{padding-bottom:0}
+h1{font-size:21px;font-weight:800;color:var(--ink);margin:0 0 6px;line-height:1.45}
+.sub{font-size:14px;color:var(--mute);margin:0}
+
+/* 通知バナー */
+#banner{max-width:720px;margin:0 auto 14px;padding:0 16px}
+.bn{display:none;align-items:flex-start;gap:10px;border-radius:10px;padding:12px 14px;font-size:14.5px;font-weight:700;line-height:1.6}
+.bn.show{display:flex}
+.bn-info{background:var(--tint);border:1px solid #BBD0EC;color:var(--navy)}
+.bn-ok{background:#EAF6F0;border:1px solid #A9D9C2;color:var(--green)}
+.bn-warn{background:#FFF6F5;border:1px solid #F3C9C4;color:#8A2B22}
+.bn .x{margin-left:auto;background:none;border:0;font-size:20px;line-height:1;color:inherit;cursor:pointer;padding:0 2px;width:auto;min-height:auto;font-weight:700;opacity:.65}
+
+.lead{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px 18px 14px;margin-bottom:14px}
+.lead p{margin:0 0 10px}
+.lead ul{margin:0;padding-left:1.15em}
+.lead li{margin-bottom:6px}
+.time{display:inline-block;background:var(--tint);color:var(--navy);font-weight:700;border-radius:999px;padding:3px 12px;font-size:14px}
+.warn{background:#FFF6F5;border:1px solid #F3C9C4;border-radius:10px;padding:12px 14px;margin:12px 0 0;color:#8A2B22;font-size:14px}
+
+/* 保存の説明（開閉） */
+details.saveinfo{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:16px;font-size:14px;color:var(--mute)}
+details.saveinfo summary{cursor:pointer;font-weight:700;color:var(--navy);list-style:none;min-height:24px;display:flex;align-items:center;gap:7px}
+details.saveinfo summary::-webkit-details-marker{display:none}
+details.saveinfo summary::before{content:"▸";display:inline-block;transition:none}
+details.saveinfo[open] summary::before{content:"▾"}
+details.saveinfo ul{margin:9px 0 0;padding-left:1.15em}
+details.saveinfo li{margin-bottom:4px}
+
+.q{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+.q.hidden{display:none}
+.qhead{display:flex;gap:10px;align-items:flex-start;margin-bottom:4px}
+.num{flex:0 0 auto;background:var(--blue);color:#fff;font-weight:800;font-size:13px;border-radius:6px;padding:2px 8px;margin-top:3px}
+.qt{font-weight:700;color:var(--ink);font-size:16px;line-height:1.6}
+.badge{display:inline-block;font-size:12px;font-weight:700;border-radius:5px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+.req{background:#FDECEA;color:var(--red)}
+.opt{background:var(--bg);color:var(--mute)}
+.note{font-size:14px;color:var(--mute);margin:8px 0 0;padding-left:2px}
+.note strong{color:var(--body)}
+.flow{background:var(--tint);border-radius:8px;padding:12px 14px;margin:10px 0 0;font-size:14px;color:var(--navy);font-weight:600;overflow-x:auto;white-space:nowrap}
+.opts{margin-top:12px}
+label.opt-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:9px;margin-bottom:7px;cursor:pointer;background:var(--white);min-height:44px}
+label.opt-row:hover{background:var(--tint)}
+label.opt-row input{margin:3px 0 0;width:20px;height:20px;flex:0 0 auto;accent-color:var(--blue)}
+label.opt-row span{font-size:15px;line-height:1.55}
+input[type=text],textarea{width:100%;font-size:16px;font-family:inherit;color:var(--body);border:1px solid #BDC7D6;border-radius:9px;padding:11px 12px;background:var(--white);margin-top:10px;min-height:44px}
+textarea{min-height:96px;resize:vertical}
+input[type=text]:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.sub-in{margin-top:8px}
+.q.err{border-color:#E8A9A2;box-shadow:0 0 0 3px #FBE9E7}
+.errmsg{color:var(--red);font-size:14px;font-weight:700;margin-top:9px;display:none}
+.q.err .errmsg{display:block}
+.limit{font-size:13px;color:var(--mute);margin-top:8px}
+.limit.over{color:var(--red);font-weight:700}
+
+.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:20px}
+button{font-family:inherit;font-size:16px;font-weight:800;border:0;border-radius:10px;padding:15px 18px;width:100%;cursor:pointer;min-height:52px}
+.primary{background:var(--navy);color:#fff}
+.primary:active{background:#16305e}
+.ghost{background:var(--white);color:var(--navy);border:1.5px solid var(--navy);margin-top:10px}
+.danger{background:var(--white);color:#8A2B22;border:1px solid #E3BDB8;font-weight:700;font-size:14.5px;min-height:46px;padding:12px}
+.helper{font-size:14px;color:var(--mute);margin:0 0 12px}
+
+/* 回答確認 */
+#reviewView{display:none}
+#reviewView.show{display:block}
+h2{font-size:18px;font-weight:800;color:var(--ink);margin:0 0 4px}
+.rv-item{border-top:1px solid var(--line);padding:12px 0}
+.rv-item:first-of-type{border-top:0;padding-top:4px}
+.rv-q{font-size:13.5px;color:var(--mute);font-weight:700;margin:0 0 3px}
+.rv-a{font-size:15.5px;color:var(--ink);margin:0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.rv-count{font-size:14px;color:var(--mute);margin:0 0 14px}
+.out{margin-top:14px;display:none}
+.out.show{display:block}
+.out textarea{min-height:230px;font-size:16px;background:#FAFBFC}
+.copybox{background:#FAFBFC;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow-y:auto;-webkit-user-select:all;user-select:all;display:none}
+.copybox.show{display:block}
+footer{text-align:center;color:var(--mute);font-size:13px;margin-top:26px}
+@media (max-width:560px){
+  h1{font-size:19px}
+  .q,.panel{padding:15px}
+  .wrap{padding:0 12px 56px}
+  #banner{padding:0 12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>アロマ業務管理アプリ　業務確認シート</h1>
+    <p class="sub">ONEce　二階堂さま／NILE CREATE　木戸</p>
+  </div>
+</header>
+
+<div id="banner">
+  <div class="bn" id="bn" role="status" aria-live="polite">
+    <span id="bnText"></span>
+    <button type="button" class="x" id="bnClose" aria-label="閉じる">×</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 入力画面 ============ -->
+  <div id="formView">
+
+    <div class="lead">
+      <p>いま作っているアプリを、実際の業務に合わせるための確認です。<br><span class="time">所要時間 10〜15分</span></p>
+      <ul>
+        <li>分からない項目は「分からない」を選んでください</li>
+        <li>ここですべてを決めるものではありません。回答を見て、必要な部分だけ後日あらためて確認します</li>
+        <li>回答は自動で送信されません。最後に「回答をコピーする」を押して、LINEに貼り付けて返信してください</li>
+      </ul>
+      <div class="warn">
+        実際のお客様の会社名・お名前・電話番号・住所は書かないでください。例を挙げる場合は「A社」「美容室B」のような書き方でお願いします。<br>
+        このフォームの入力内容は、回答を送るまで使用中の端末内に保存されます。
+      </div>
+    </div>
+
+    <details class="saveinfo">
+      <summary>入力内容はこの端末内に自動保存されます</summary>
+      <ul>
+        <li>途中で閉じても、同じ端末の同じブラウザで開き直せば続きから回答できます</li>
+        <li>入力内容がサーバーへ送られることはありません</li>
+        <li>別の端末には引き継がれません</li>
+        <li>ブラウザのデータ（履歴・サイトデータ）を削除すると消えます</li>
+      </ul>
+    </details>
+
+    <form id="f" novalidate></form>
+
+    <div class="panel">
+      <p class="helper">すべて回答したら、内容を確認してからコピーします。</p>
+      <button type="button" class="primary" id="toReviewBtn">回答内容を確認する</button>
+    </div>
+
+    <div class="panel">
+      <button type="button" class="danger" id="clearBtn">入力内容をすべて消す</button>
+    </div>
+
+  </div>
+
+  <!-- ============ 確認画面 ============ -->
+  <div id="reviewView">
+    <div class="panel">
+      <h2>回答内容の確認</h2>
+      <p class="rv-count" id="rvCount"></p>
+      <div id="rvList"></div>
+    </div>
+
+    <div class="panel">
+      <button type="button" class="primary" id="copyBtn">回答をコピーする</button>
+      <button type="button" class="ghost" id="backBtn">修正する（入力画面へ戻る）</button>
+
+      <div class="out" id="out">
+        <p class="helper" id="outHelp"></p>
+        <div class="copybox" id="copyBox"></div>
+        <textarea id="outText" readonly aria-label="回答テキスト"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <footer>NILE CREATE　木戸<br>ご不明な点はLINEでそのままご返信ください</footer>
+</div>
+
+<script>
+"use strict";
+
+/* ============ 設問定義（原稿 NIKAIDO_SELF_HEARING_FORM.md と一致） ============ */
+var Q = [
+ {id:1,t:"お名前",type:"text",req:true},
+ {id:2,t:"現在、一番手間がかかっている・困っている業務はどれですか",type:"multi",req:true,
+  o:["顧客情報を探す","集金予定の管理","集金が済んだかの確認","アロマ交換予定の管理","商談・無料レンタルの管理","契約情報の管理","Excelへの入力","予定の確認","その他","特に困っていない"],other:"その他"},
+ {id:3,t:"このアプリで特に優先して改善したいことを、3つまで選んでください",type:"multi",req:true,max:3,
+  note:"作る順番を決めるために使います。順位を付ける必要はありません。3つまでで選べない場合は「その他」に書いてください。",
+  o:["顧客情報を探しやすくする","集金忘れを防ぐ","アロマ交換忘れを防ぐ","商談・無料レンタルを管理する","スマートフォンで見やすくする","Googleカレンダーと連携する","Excelからデータを移す","売上や入金を集計する","見積書・請求書を作る","予定のお知らせを受け取る","その他"],other:"その他"},
+ {id:4,t:"アプリを主に使うのはどなたですか",type:"one",req:true,
+  o:["二階堂さん1人だけ","二階堂さん＋スタッフ（2〜3人）","二階堂さん＋スタッフ（4人以上）","外部の協力業者にも使ってもらいたい","まだ決めていない"]},
+ {id:5,t:"主に使う端末はどちらですか",type:"one",req:true,
+  o:["ほぼスマートフォン","スマートフォンが多い","半々くらい","パソコンが多い","ほぼパソコン"]},
+ {id:6,t:"現在の仕事の流れは、下の流れとほぼ同じですか",type:"one",req:true,
+  flow:"問い合わせ → 商談 → 無料レンタル → 契約 → 設置 → 集金 → アロマ交換",
+  o:["ほぼ同じ","一部違う","かなり違う","お客様によってバラバラ"]},
+ {id:7,t:"どこが違いますか",type:"text",req:false,
+  note:"ひと言で構いません（例：「無料レンタルは全員ではなく、迷っているお客様だけ」）",
+  showIf:{q:6,vals:["一部違う","かなり違う","お客様によってバラバラ"]}},
+ {id:8,t:"現在、管理に使っているものをすべて選んでください",type:"multi",req:true,
+  o:["Excel","Googleスプレッドシート","紙のノート・手帳","LINEのやりとり","Googleカレンダー","スマートフォンのカレンダー","頭の中で覚えている","その他"],other:"その他"},
+ {id:9,t:"現在お使いのExcelまたはGoogleスプレッドシートを、こちらで確認させていただくことはできますか",type:"one",req:false,
+  note:"実際にお使いのものを拝見できると、確認のやりとりが大幅に減ります。<strong>お客様の名前・電話・住所は消したものをお願いします</strong>",
+  o:["お客様の情報を消したコピーを共有できる","消す作業を手伝ってもらえれば共有できる","画面の一部（見出しの部分など）なら共有できる","共有は難しい","相談したい"],
+  showIf:{q:8,vals:["Excel","Googleスプレッドシート"]}},
+ {id:10,t:"現在、契約中または対応中のお客様は、おおよそ何件くらいですか",type:"one",req:false,
+  note:"過去に解約されたお客様は含めず、現在おつきあいのあるお客様の数でお答えください",
+  o:["10件未満","10〜30件","30〜50件","50〜100件","100件以上","分からない"]},
+ {id:11,t:"同じお客様で、複数の店舗や複数の契約があることはありますか",type:"one",req:true,
+  o:["複数店舗がある","複数契約がある","両方ある","どちらもない（1社につき1店舗・1契約）","分からない"]},
+ {id:12,t:"無料レンタル（お試し設置）を、アプリで管理する必要はありますか",type:"one",req:true,
+  note:"現在のアプリには無料レンタルを管理する機能がありません",
+  o:["必要（どの機器を誰に貸しているか管理したい）","あると便利だが、今すぐでなくてよい","不要","無料レンタルはやっていない","分からない"]},
+ {id:13,t:"料金の受け取り方法をすべて選んでください",type:"multi",req:true,
+  o:["現金で直接受け取る","銀行振込","口座振替（自動引き落とし）","クレジットカード","その他"],other:"その他"},
+ {id:14,t:"集金日や支払日はどのように決まりますか",type:"one",req:true,
+  o:["全員ほぼ同じ日","お客様ごとに決まった日がある","毎回変わる","月によって変わる","まだ整理できていない"]},
+ {id:15,t:"集金日や支払日が土日祝と重なった場合はどうしますか",type:"one",req:true,
+  o:["前の平日にする","次の平日にする","そのまま（気にしない）","お客様ごとに違う","決まっていない"]},
+ {id:16,t:"予定日に集金できなかった、または入金を確認できなかった場合、どのように管理したいですか",type:"one",req:true,
+  o:["「未回収」として残しておきたい","日付を変更して、あらためて予定を入れたい","メモだけ残せればよい","現在は特に管理していない","相談して決めたい"]},
+ {id:17,t:"アロマ交換の基本の周期はどれくらいですか",type:"one",req:true,
+  o:["1か月ごと","2か月ごと","3か月ごと","半年ごと","1年ごと","決まっておらず、状況を見て判断","まだ決めていない"]},
+ {id:18,t:"お客様や設置場所によって、交換の周期が変わることはありますか",type:"one",req:true,
+  o:["お客様ごとに変わる","同じお客様でも、設置場所ごとに変わる","両方ある","変わらない（全員同じ周期）","分からない"]},
+ {id:19,t:"交換が予定日より遅れた場合、次回の予定はどこから数えますか",type:"one",req:true,
+  note:"例えば半年ごとの契約で、予定日より2週間遅れて交換した場合。「実際に交換した日から」だと次回も2週間ずれます。「もともとの予定日から」だとズレが元に戻ります。",
+  o:["実際に交換した日から数える","もともとの予定日から数える","お客様ごとに違う","分からない／相談したい"]},
+ {id:20,t:"予定のお知らせ（通知）は必要ですか",type:"one",req:true,
+  o:["必要","あると便利だが、なくてもよい","不要（自分で画面を見に行く）","分からない／相談したい"]},
+ {id:21,t:"Googleカレンダーを現在お使いですか",type:"one",req:true,
+  o:["使っている","使っていない","分からない"]},
+ {id:22,t:"最初は何件くらいで試してみたいですか",type:"one",req:false,
+  o:["3〜5件","10件程度","最初から全部","分からない／おまかせ"]},
+ {id:23,t:"お試し中、現在の管理方法とアプリを一時的に併用できますか",type:"one",req:false,
+  note:"例：Excelや紙の記録を残しながら、同じ内容をアプリにも登録する",
+  o:["併用できる","できればアプリだけにしたい","分からない／相談したい"]},
+ {id:24,t:"少し特殊なお客様の例があれば、1件だけ教えてください",type:"area",req:false,
+  note:"1〜2行で構いません。例：「A社だけ交換が3か月ごと」「美容室Bは2店舗あり、店舗ごとに集金日が違う」<br><strong>実名・住所・電話番号は書かないでください。「A社」「美容室B」のような書き方でお願いします</strong>"},
+ {id:25,t:"その他、伝えておきたいことがあればお書きください",type:"area",req:false}
+];
+
+var STORE_KEY = "nikaido-self-hearing-form-v1";
+var STORE_VER = 1;
+
+var form = document.getElementById("f");
+var formView = document.getElementById("formView");
+var reviewView = document.getElementById("reviewView");
+
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+/* ============ 描画 ============ */
+Q.forEach(function(q){
+  var d = document.createElement("div");
+  d.className = "q" + (q.showIf ? " hidden" : "");
+  d.id = "q" + q.id;
+  var h = '<div class="qhead"><span class="num">Q' + q.id + '</span><span class="qt">' + esc(q.t) +
+    '<span class="badge ' + (q.req ? 'req">必須' : 'opt">任意') + '</span></span></div>';
+  if (q.flow) h += '<div class="flow">' + esc(q.flow) + '</div>';
+  if (q.note) h += '<p class="note">' + q.note + '</p>';
+  if (q.type === "one" || q.type === "multi") {
+    var it = q.type === "one" ? "radio" : "checkbox";
+    h += '<div class="opts">';
+    q.o.forEach(function(o){
+      h += '<label class="opt-row"><input type="' + it + '" name="q' + q.id + '" value="' + esc(o) + '" data-q="' + q.id + '"><span>' + esc(o) + '</span></label>';
+    });
+    h += "</div>";
+    if (q.other) h += '<input type="text" class="sub-in" id="other' + q.id + '" data-other="' + q.id + '" placeholder="「その他」の内容（任意）" style="display:none">';
+    if (q.max) h += '<div class="limit" id="lim' + q.id + '">あと' + q.max + "つ選べます</div>";
+  } else if (q.type === "text") {
+    h += '<input type="text" name="q' + q.id + '" placeholder="ご記入ください">';
+  } else {
+    h += '<textarea name="q' + q.id + '" placeholder="ご記入ください"></textarea>';
+  }
+  h += '<div class="errmsg">この質問は必須です。回答をお選びください。</div>';
+  d.innerHTML = h;
+  form.appendChild(d);
+});
+
+/* ============ 補助 ============ */
+function qEl(id){ return document.getElementById("q" + id); }
+function isHidden(id){ return qEl(id).classList.contains("hidden"); }
+function vals(id){
+  var n = form.querySelectorAll('input[name=q' + id + ']:checked');
+  return Array.prototype.map.call(n, function(e){ return e.value; });
+}
+function otherVal(id){
+  var b = document.getElementById("other" + id);
+  return b ? b.value.trim() : "";
+}
+function textVal(id){
+  var f = form.querySelector("[name=q" + id + "]");
+  return f ? f.value.trim() : "";
+}
+function clearQuestion(id){
+  var el = qEl(id);
+  var ins = el.querySelectorAll("input, textarea");
+  Array.prototype.forEach.call(ins, function(i){
+    if (i.type === "radio" || i.type === "checkbox") i.checked = false;
+    else i.value = "";
+  });
+  var ob = document.getElementById("other" + id);
+  if (ob) ob.style.display = "none";
+  el.classList.remove("err");
+}
+
+/* ============ 分岐 ============ */
+function applyBranch(){
+  Q.filter(function(q){ return q.showIf; }).forEach(function(q){
+    var cur = vals(q.showIf.q);
+    var on = cur.some(function(v){ return q.showIf.vals.indexOf(v) >= 0; });
+    var el = qEl(q.id);
+    var was = !el.classList.contains("hidden");
+    el.classList.toggle("hidden", !on);
+    if (!on && was) clearQuestion(q.id);   /* 非表示になった瞬間に回答を破棄 */
+    if (!on) clearQuestion(q.id);
+  });
+}
+
+/* ============ 3つ上限 ============ */
+function applyLimit(q){
+  var n = vals(q.id).length, left = q.max - n;
+  var lim = document.getElementById("lim" + q.id);
+  lim.textContent = left > 0 ? "あと" + left + "つ選べます" : "3つ選びました（変更するには、いま選んでいるものを1つ外してください）";
+  lim.classList.toggle("over", left <= 0);
+  var ins = form.querySelectorAll("input[name=q" + q.id + "]");
+  Array.prototype.forEach.call(ins, function(i){ i.disabled = (!i.checked && left <= 0); });
+}
+
+/* ============ 保存・復元 ============ */
+function collect(){
+  var a = {}, o = {};
+  Q.forEach(function(q){
+    if (isHidden(q.id)) return;              /* 非表示の設問は保存しない */
+    if (q.type === "one" || q.type === "multi") {
+      var v = vals(q.id);
+      if (v.length) a[q.id] = v;
+      if (q.other && v.indexOf(q.other) >= 0) {
+        var ov = otherVal(q.id);
+        if (ov) o[q.id] = ov;
+      }
+    } else {
+      var t = textVal(q.id);
+      if (t) a[q.id] = t;
+    }
+  });
+  return { a: a, o: o };
+}
+var saveTimer = null;
+function save(){
+  try {
+    var c = collect();
+    var payload = { v: STORE_VER, savedAt: new Date().toISOString(), a: c.a, o: c.o };
+    localStorage.setItem(STORE_KEY, JSON.stringify(payload));
+  } catch (e) { /* 保存できない環境でも入力は続行できる */ }
+}
+function saveSoon(){
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 180);
+}
+function loadSaved(){
+  var raw = null;
+  try { raw = localStorage.getItem(STORE_KEY); } catch (e) { return null; }
+  if (!raw) return null;
+  var d = null;
+  try { d = JSON.parse(raw); } catch (e) { return null; }
+  if (!d || typeof d !== "object") return null;
+  if (d.v !== STORE_VER) return null;                      /* 旧バージョンは無視 */
+  if (!d.a || typeof d.a !== "object") return null;
+  if (d.o && typeof d.o !== "object") return null;
+  return d;
+}
+function restore(){
+  var d = loadSaved();
+  if (!d) return false;
+  var applied = 0;
+  Q.forEach(function(q){
+    var v = d.a[q.id];
+    if (v === undefined || v === null) return;
+    try {
+      if (q.type === "one" || q.type === "multi") {
+        if (!Array.isArray(v)) return;
+        v.forEach(function(val){
+          if (typeof val !== "string") return;
+          var ins = form.querySelectorAll("input[name=q" + q.id + "]");
+          Array.prototype.forEach.call(ins, function(i){
+            if (i.value === val) { i.checked = true; applied++; }
+          });
+        });
+        if (q.other && d.o && typeof d.o[q.id] === "string") {
+          var ob = document.getElementById("other" + q.id);
+          if (ob) ob.value = d.o[q.id];
+        }
+      } else {
+        if (typeof v !== "string") return;
+        var f = form.querySelector("[name=q" + q.id + "]");
+        if (f) { f.value = v; applied++; }
+      }
+    } catch (e) { /* 1問失敗しても他は続行 */ }
+  });
+  applyBranch();
+  Q.filter(function(q){ return q.other; }).forEach(function(q){
+    var ob = document.getElementById("other" + q.id);
+    if (ob) ob.style.display = (vals(q.id).indexOf(q.other) >= 0) ? "block" : "none";
+  });
+  Q.filter(function(q){ return q.max; }).forEach(applyLimit);
+  return applied > 0;
+}
+
+/* ============ 通知バナー ============ */
+var bn = document.getElementById("bn"), bnText = document.getElementById("bnText"), bnTimer = null;
+function notify(msg, kind, autoHideMs){
+  bn.className = "bn show " + (kind || "bn-info");
+  bnText.textContent = msg;                                 /* textContent で挿入 */
+  if (bnTimer) clearTimeout(bnTimer);
+  if (autoHideMs) bnTimer = setTimeout(hideNotify, autoHideMs);
+}
+function hideNotify(){ bn.className = "bn"; }
+document.getElementById("bnClose").addEventListener("click", hideNotify);
+
+/* ============ 入力イベント ============ */
+form.addEventListener("change", function(e){
+  var t = e.target;
+  if (t.dataset && t.dataset.q) {
+    var q = Q.filter(function(x){ return x.id === +t.dataset.q; })[0];
+    if (q.other) {
+      var box = document.getElementById("other" + q.id);
+      if (box) {
+        var on = vals(q.id).indexOf(q.other) >= 0;
+        box.style.display = on ? "block" : "none";
+        if (!on) box.value = "";
+      }
+    }
+    if (q.max) applyLimit(q);
+    qEl(q.id).classList.remove("err");
+    applyBranch();
+  }
+  saveSoon();
+});
+form.addEventListener("input", function(e){
+  var t = e.target;
+  if (t.name) { var el = qEl(t.name.slice(1)); if (el) el.classList.remove("err"); }
+  saveSoon();
+});
+
+/* ============ 回答の取り出し ============ */
+function answerOf(q){
+  if (isHidden(q.id)) return null;                          /* 非表示は結果に含めない */
+  if (q.type === "one" || q.type === "multi") {
+    var a = vals(q.id);
+    if (q.other && a.indexOf(q.other) >= 0) {
+      var tx = otherVal(q.id);
+      if (tx) a = a.map(function(v){ return v === q.other ? q.other + "（" + tx + "）" : v; });
+    }
+    return a.length ? a.join(" / ") : "";
+  }
+  return textVal(q.id);
+}
+
+/* ============ 必須チェック ============ */
+function validate(){
+  var missing = [];
+  Q.forEach(function(q){
+    var el = qEl(q.id);
+    el.classList.remove("err");
+    if (!q.req || isHidden(q.id)) return;
+    if (!answerOf(q)) { el.classList.add("err"); missing.push(q.id); }
+  });
+  return missing;
+}
+
+/* ============ 回答テキスト ============ */
+function build(){
+  var d = new Date();
+  var ymd = d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日";
+  var s = "【アロマ業務管理アプリ　業務確認シート】回答\n回答日：" + ymd + "\n";
+  Q.forEach(function(q){
+    var a = answerOf(q);
+    if (a === null) return;                                  /* 分岐で非表示 */
+    if (!a && !q.req) return;                                /* 任意の未回答は載せない */
+    s += "\n──────────\nQ" + q.id + ". " + q.t + "\n→ " + (a || "（未回答）") + "\n";
+  });
+  s += "\n──────────\n以上です。";
+  return s;
+}
+
+/* ============ 確認画面 ============ */
+function renderReview(){
+  var list = document.getElementById("rvList");
+  list.textContent = "";
+  var n = 0;
+  Q.forEach(function(q){
+    var a = answerOf(q);
+    if (a === null) return;
+    if (!a) return;                                          /* 未回答は表示しない */
+    n++;
+    var it = document.createElement("div"); it.className = "rv-item";
+    var qp = document.createElement("p"); qp.className = "rv-q";
+    qp.textContent = "Q" + q.id + ". " + q.t;                /* textContent で挿入 */
+    var ap = document.createElement("p"); ap.className = "rv-a";
+    ap.textContent = a;                                      /* textContent で挿入 */
+    it.appendChild(qp); it.appendChild(ap); list.appendChild(it);
+  });
+  document.getElementById("rvCount").textContent = "回答した質問：" + n + "件（未回答の任意項目は表示していません）";
+}
+function showReview(){
+  formView.style.display = "none";
+  reviewView.classList.add("show");
+  document.getElementById("out").classList.remove("show");
+  document.getElementById("copyBox").classList.remove("show");
+  window.scrollTo(0, 0);
+}
+function showForm(){
+  reviewView.classList.remove("show");
+  formView.style.display = "";
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("toReviewBtn").addEventListener("click", function(){
+  var missing = validate();
+  if (missing.length) {
+    notify("未回答の必須項目が " + missing.length + "件あります。赤く表示された質問にご回答ください。", "bn-warn", 0);
+    var first = qEl(missing[0]);
+    first.scrollIntoView({ block: "center" });
+    return;
+  }
+  hideNotify();
+  renderReview();
+  showReview();
+});
+document.getElementById("backBtn").addEventListener("click", function(){ hideNotify(); showForm(); });
+
+/* ============ コピー ============ */
+document.getElementById("copyBtn").addEventListener("click", function(){
+  var txt = build();
+  var outEl = document.getElementById("out");
+  var boxEl = document.getElementById("copyBox");
+  var taEl = document.getElementById("outText");
+  var helpEl = document.getElementById("outHelp");
+  taEl.value = txt;
+
+  function fail(){
+    helpEl.textContent = "自動コピーできませんでした。下の回答を長押ししてコピーしてください";
+    boxEl.textContent = txt;                                 /* textContent で挿入 */
+    boxEl.classList.add("show");
+    taEl.style.display = "none";
+    outEl.classList.add("show");
+    notify("自動コピーできませんでした。下の回答を長押ししてコピーしてください。", "bn-warn", 0);
+    outEl.scrollIntoView({ block: "start" });
+  }
+  function ok(){
+    helpEl.textContent = "コピーした内容（確認用）";
+    boxEl.classList.remove("show");
+    taEl.style.display = "";
+    outEl.classList.add("show");
+    notify("回答をコピーしました。木戸とのLINEを開き、メッセージ入力欄を長押しして『ペースト』を選び、そのまま送信してください。", "bn-ok", 0);
+    window.scrollTo(0, 0);
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(txt).then(ok, function(){ legacy(); });
+  } else { legacy(); }
+
+  function legacy(){
+    var done = false;
+    try {
+      outEl.classList.add("show");
+      taEl.style.display = "";
+      taEl.focus(); taEl.select(); taEl.setSelectionRange(0, 999999);
+      done = document.execCommand("copy");
+    } catch (e) { done = false; }
+    if (done) ok(); else fail();
+  }
+});
+
+/* ============ 全削除 ============ */
+document.getElementById("clearBtn").addEventListener("click", function(){
+  if (!window.confirm("入力した回答をすべて削除します。元に戻せませんが、よろしいですか？")) return;
+  Q.forEach(function(q){ clearQuestion(q.id); });
+  Q.filter(function(q){ return q.showIf; }).forEach(function(q){ qEl(q.id).classList.add("hidden"); });
+  Q.filter(function(q){ return q.max; }).forEach(applyLimit);
+  try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+  document.getElementById("out").classList.remove("show");
+  document.getElementById("copyBox").classList.remove("show");
+  document.getElementById("rvList").textContent = "";
+  document.getElementById("rvCount").textContent = "";
+  document.getElementById("outText").value = "";
+  showForm();
+  notify("入力内容を削除しました", "bn-info", 6000);
+});
+
+/* ============ 起動 ============ */
+applyBranch();
+Q.filter(function(q){ return q.max; }).forEach(applyLimit);
+if (restore()) {
+  notify("前回途中まで入力した内容を復元しました", "bn-info", 8000);
+}
+</script>
+</body>
+</html>
