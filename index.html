@@ -441,7 +441,7 @@ form.addEventListener("change", function(e){
         box.style.display = on ? "block" : "none";
         if (!on) { box.value = ""; }
         else {
-          box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          box.scrollIntoView({ block: "nearest" });
           box.focus({ preventScroll: true });
         }
       }
